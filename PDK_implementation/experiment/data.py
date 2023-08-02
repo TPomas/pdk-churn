@@ -1,7 +1,13 @@
+# New imports
+import os
+import shutil
+import python_pachyderm
+from python_pachyderm.pfs import Commit
+from python_pachyderm.proto.v2.pfs.pfs_pb2 import FileType
+
+# Old imports
 import pandas as pd
 import numpy as np
-
-import os
 
 from utils import *
 
@@ -57,6 +63,13 @@ def get_train_and_validation_datasets(data_files, test_size=0.2, random_seed=42)
     val_dataset = Churn_Dataset(val_df, training_cols, label_col)
     
     return train_dataset, val_dataset
+
+# New - helper function used below
+def safe_open_wb(path):
+    ''' Open "path" for writing, creating any parent directories as needed.
+    '''
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    return open(path, 'wb')
 
 # New - helper function to download data from Pachyderm repository
 def download_pach_repo(
