@@ -1,4 +1,4 @@
-name: churn_const_experiment
+name: Pipeline-Churn-Training
 workspace: Tanguy # to change depending on Determined cluster
 project: "PDK Tests" # to change depending on Determined cluster
 data:
