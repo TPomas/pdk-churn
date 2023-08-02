@@ -1,4 +1,6 @@
 name: churn_const_experiment
+workspace: Tanguy # to change depending on Determined cluster
+project: "PDK Tests" # to change depending on Determined cluster
 data:
   #data_file: "data/dataset.csv"
   pachyderm:
@@ -21,9 +23,10 @@ searcher:
     metric: val_acc 
     max_length:
         #epochs: 20 # requires records_per_epoch to be known, set bactches instead
-        batches: 1920
+        batches: 1000
     smaller_is_better: false
 min_validation_period:
-    epochs: 1               # Validation after each epoch
+    #epochs: 1 #requires records_per_epoch to be known, set bactches instead
+    batches: 100
 max_restarts: 0
 entrypoint: model_def:ChurnTrial
