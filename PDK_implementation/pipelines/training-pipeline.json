@@ -6,7 +6,7 @@
   "input": {
     "pfs": {
       "name": "data",
-      "repo": "dogs-and-cats-data",
+      "repo": "customer-churn-data",
       "branch": "master",
       "glob": "/",
       "empty_files": true
@@ -17,7 +17,7 @@
       "/bin/sh"
     ],
     "stdin": [
-      "python train.py --git-url https://git@github.com:/TPomas/pdk-churn.git --git-ref main --sub-dir PDK_implementation/experiment --config const.yaml --repo dogs-and-cats-data --model tp-customer-churn --project test-tp"
+      "python train.py --git-url https://git@github.com:/TPomas/pdk-churn.git --git-ref main --sub-dir PDK_implementation/experiment --config const.yaml --repo customer-churn-data --model tp-customer-churn --project test-tp"
     ],
     "image": "vmtyler/pdk:train_0.1.1",
     "secrets": [
