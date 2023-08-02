@@ -15,9 +15,9 @@ hyperparameters:
   global_batch_size: 512
   random_seed: 42
   test_size: 0.2
-  lr: 1e-4
+  lr: 0.0001
   dense1: 32
-#records_per_epoch: 48807 # no longer fixed, if we plan several data commit in pachyderm
+#records_per_epoch: 48807 # no longer fixed, if we plan several data commits in pachyderm
 searcher:
     name: single
     metric: val_acc 
