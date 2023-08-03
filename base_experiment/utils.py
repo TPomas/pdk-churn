@@ -2,8 +2,6 @@ import pandas as pd
 import torch
 import json
 
-from determined.experimental import Determined
-
 # Apply standard scaling to all numerical columns of df, using mean and std given in json file
 def scale_data(df, json_numscale="numscale.json"):
     f = open(json_numscale)
