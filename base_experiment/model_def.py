@@ -1,6 +1,6 @@
 from typing import Any, Dict, Union, Sequence
 
-from data import *
+from data import Churn_Dataset, get_train_and_validation_datasets
 
 import torch
 from torch import nn

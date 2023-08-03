@@ -1,15 +1,16 @@
 import pandas as pd
 import torch
+import json
 
 from determined.experimental import Determined
 
-# Apply standard scaling to all numerical columns of df, using mean and std from reference_df
-# Make sure not to pass a scaled "reference_df" as argument, since we use its values to scale df
-def scale_data(df, reference_df, numerical_cols):
-    for col in numerical_cols:
-        mean = reference_df[col].mean()
-        std = reference_df[col].std()
-        df[col] = (df[col] - mean) / std
+# Apply standard scaling to all numerical columns of df, using mean and std given in json file
+def scale_data(df, json_numscale="numscale.json"):
+    f = open(json_numscale)
+    scale_dict = json.load(f)
+    f.close()
+    for col in scale_dict:
+        df[col] = (df[col] - scale_dict[col]["mean"]) / scale_dict[col]["std"]
     
     return df
 
@@ -46,48 +47,6 @@ def encode_categories(df):
 
 # Make sure not to pass a scaled "reference_df" as argument, since we use its values to scale df
 def preprocess_dataframe(df, reference_df, numerical_cols):
-    df = scale_data(df, reference_df, numerical_cols)
+    df = scale_data(df)
     df = encode_categories(df)
     return df
-
-def predict_and_evaluate(model, df_to_predict, data_file="data/cleaned_data.csv"):
-    
-    reference_df = pd.read_csv(data_file)
-    df = df_to_predict.copy()
-    
-    object_cols = list(reference_df.columns[reference_df.dtypes.values == "object"])
-    int_cols = list(reference_df.columns[reference_df.dtypes.values == "int"])
-    float_cols = list(reference_df.columns[reference_df.dtypes.values == "float"])
-
-    # Churn will be the label, no need to preprocess it
-    int_cols.remove("churn")
-
-    numerical_cols = int_cols+float_cols
-    
-    df = preprocess_dataframe(df, reference_df, numerical_cols)
-    feature_cols = list(df.columns)
-    label_col = "churn"
-    feature_cols.remove(label_col)
-    
-    input_tensor = torch.Tensor(df[feature_cols].values)
-    label_tensor = torch.Tensor(df[[label_col]].values)
-    
-    model.eval()
-    with torch.no_grad():
-        preds = model(input_tensor)
-    
-    preds[preds < 0.5] = 0.0
-    preds[preds >= 0.5] = 1.0
-    accuracy = float(torch.sum(label_tensor == preds) / len(preds))
-    
-    return preds.numpy(), accuracy
-
-
-def check_model(model_name):
-
-    if len(Determined().get_models(name=model_name)) > 0:
-        model = Determined().get_models(name=model_name)[0]
-    else:
-        model = Determined().create_model(model_name)
-        
-    return model
