@@ -3,7 +3,8 @@ from typing import Any, Dict, Union, Sequence
 import logging
 import os
 
-from data import * # New - download_pach_repo function has been added to data.py
+# New - download_pach_repo function has been added to data.py
+from data import Churn_Dataset, get_train_and_validation_datasets, download_pach_repo 
 
 import torch
 from torch import nn

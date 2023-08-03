@@ -9,7 +9,7 @@ from python_pachyderm.proto.v2.pfs.pfs_pb2 import FileType
 import pandas as pd
 import numpy as np
 
-from utils import *
+from utils import preprocess_dataframe
 
 from sklearn.model_selection import train_test_split
 
