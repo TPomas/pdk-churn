@@ -71,7 +71,7 @@ class CustomerChurnHandler(BaseHandler):
         if data is None:
             data = requests[0].get('data')
             
-        df = pd.DataFrame.from_dict(data)
+        df = pd.DataFrame.from_dict(data).reset_index(drop=True)
         logger.info('Successfully converted json/dict back to pandas DataFrame')                             
         
         df = self.scale_data(df)
