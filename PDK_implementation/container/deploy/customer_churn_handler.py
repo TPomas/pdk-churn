@@ -21,7 +21,7 @@ class CustomerChurnHandler(BaseHandler):
         f.close()
 
     def scale_data(self, df):
-        for col in scale_dict:
+        for col in self.scale_dict:
             df[col] = (df[col] - self.scale_dict[col]["mean"]) / self.scale_dict[col]["std"]
         
         return df
