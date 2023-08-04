@@ -8,8 +8,6 @@ import pandas as pd
 from ts.torch_handler.base_handler import BaseHandler
 from torch.profiler import ProfilerActivity
 
-from utils import preprocess_dataframe
-
 logger = logging.getLogger(__name__)
 
 class CustomerChurnHandler(BaseHandler):
