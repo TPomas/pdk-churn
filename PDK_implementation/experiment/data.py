@@ -31,7 +31,7 @@ class Churn_Dataset(Dataset):
 
 def get_train_and_validation_datasets(data_files, test_size=0.2, random_seed=42):
     
-    # New
+    # New - handle a list of files, instead of a single file
     df_list = [pd.read_csv(data_file) for data_file in data_files]
     full_df = pd.concat(df_list)
     #full_df = pd.read_csv(data_file)
