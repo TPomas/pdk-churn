@@ -1,13 +1,13 @@
 name: churn_const_experiment
 data:
-  data_file: "data/dataset.csv"
+  data_file: "data/data_part1.csv"
 hyperparameters:
   global_batch_size: 512
   random_seed: 42
   test_size: 0.2
   lr: 1e-4
   dense1: 32
-records_per_epoch: 48807 # in training set, assuming random_seed=42 and test_size=0.2
+records_per_epoch: 24807 # in training set, assuming random_seed=42 and test_size=0.2
 searcher:
     name: single
     metric: val_acc 
