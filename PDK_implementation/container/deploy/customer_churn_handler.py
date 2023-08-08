@@ -11,7 +11,16 @@ from torch.profiler import ProfilerActivity
 logger = logging.getLogger(__name__)
 
 class CustomerChurnHandler(BaseHandler):
+    """
+    CustomerChurnHandler handler class. This handler extends class BaseHandler from base_handler.py, a
+    default handler. This handler takes a dictionary of feature values (list of values for each feature) from the request body
+    and returns a list of binary predictions (churn - 1, no churn - 0), stored in a list.
 
+    Here method preprocess() and inference() have been overridden while others are reused from parent class.
+    We also reused scale_data() and encode_categories() functions previously used in Determined experiment's utils.py to preprocess the request data.
+    (We do not expect persons requesting inference to have scaled and encoded their data, instead they can just convert their original pandas DataFrame
+    to JSON and submit it as it is)
+    """
 
     def __init__(self):
         super(CustomerChurnHandler, self).__init__()
@@ -56,10 +65,11 @@ class CustomerChurnHandler(BaseHandler):
         
         return df
 
-    #def initialize(self, context): 
     def preprocess(self, requests):
-        """Tokenize the input text using the suitable tokenizer and convert 
-        it to tensor
+        """
+        Get the data from the JSON request in a dictionary, convert it to a pandas DataFrame.
+        Then scale its numerical features using values from numscale.json, encode its categorical features,
+        remove the label column if present in the request and return values from the resulting DataFrame as a tensor.
 
         Args:
             requests: A list containing a dictionary, might be in the form
@@ -82,7 +92,8 @@ class CustomerChurnHandler(BaseHandler):
         
         feature_cols = list(df.columns)
         label_col = "churn"
-        feature_cols.remove(label_col)
+        if label_col in feature_cols:
+            feature_cols.remove(label_col)
         
         input_tensor = torch.Tensor(df[feature_cols].values)
         logger.info('Dataframe successfully converted to tensor')
@@ -91,14 +102,13 @@ class CustomerChurnHandler(BaseHandler):
 
 
     def inference(self, inputs):
-    
+        """
+        Apply a threshold to predicted values.
+        We could have overridden the postprocess function instead.
+        """
         output = self.model(inputs.to(self.device))
         output[output < 0.5] = 0
         output[output >= 0.5] = 1
         logger.info('Predictions successfully obtained.')
 
         return output
-    
-    def postprocess(self, data):
-
-        return data.tolist()
