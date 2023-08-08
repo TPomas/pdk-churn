@@ -10,7 +10,6 @@ data:
     branch:
     token:
     previous_commit:
-labels:
 hyperparameters:
   global_batch_size: 512
   random_seed: 42
